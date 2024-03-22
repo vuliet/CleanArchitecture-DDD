@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace UserService.Application.Common.Errors
+namespace UserService.Application.Common.Exceptions
 {
     public class DuplicateEmailException : Exception, IServiceException
     {

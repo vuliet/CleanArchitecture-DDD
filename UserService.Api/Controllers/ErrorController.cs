@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Application.Common.Errors;
+using UserService.Application.Common.Exceptions;
 
 namespace UserService.Api.Controllers;
 

@@ -1,4 +1,4 @@
-﻿using UserService.Application.Common.Errors;
+﻿using UserService.Application.Common.Exceptions;
 using UserService.Application.Common.Interfaces.Authentication;
 using UserService.Application.Common.Interfaces.Persistence;
 using UserService.Domain.Entities;
