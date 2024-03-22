@@ -1,5 +1,7 @@
 ﻿using Mapster;
+using UserService.Application.Authentication.Commands;
 using UserService.Application.Authentication.Common;
+using UserService.Application.Authentication.Queries;
 using UserService.Contracts.Authentication;
 
 namespace UserService.Api.Common.Mapping
@@ -8,8 +10,11 @@ namespace UserService.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
+            config.NewConfig<RegisterRequest, RegisterCommand>();
+
+            config.NewConfig<LoginRequest, LoginQuery>();
+
             config.NewConfig<AuthenticationResult, AuthenticationResponse>()
-                .Map(dest => dest.Token, src => src.Token)
                 .Map(dest => dest, src => src.User);
         }
     }

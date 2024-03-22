@@ -26,6 +26,8 @@ namespace UserService.Application.Authentication.Queries
             LoginQuery query,
             CancellationToken cancellationToken)
         {
+            await Task.CompletedTask;
+
             if (_userRepository.GetUserByEmail(query.Email) is not User user)
                 return Errors.Authentication.InvalidCredentials;
 
@@ -33,8 +35,6 @@ namespace UserService.Application.Authentication.Queries
                 return new[] { Errors.Authentication.InvalidCredentials };
 
             var token = _jwtTokenGenerator.GenerateToken(user);
-
-            await Task.CompletedTask;
 
             return new AuthenticationResult(user, token);
         }

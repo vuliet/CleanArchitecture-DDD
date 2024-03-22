@@ -26,6 +26,8 @@ namespace UserService.Application.Authentication.Commands
             RegisterCommand command,
             CancellationToken cancellationToken)
         {
+            await Task.CompletedTask;
+
             if (_userRepository.GetUserByEmail(command.Email) is not null)
                 return Errors.User.DuplicateEmail;
 
@@ -40,8 +42,6 @@ namespace UserService.Application.Authentication.Commands
             _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
-
-            await Task.CompletedTask;
 
             return new AuthenticationResult(user, token);
         }
