@@ -15,8 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Infrastructure"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{532142E1-A2C3-4BF0-B97C-C0ACD0CB6B16}"
 	ProjectSection(SolutionItems) = preProject
-		Docs\Api.md = Docs\Api.md
-		Docs\DomainModels.md = Docs\DomainModels.md
+		Api.md = Api.md
+		DomainModels.md = DomainModels.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{155F3A2E-0FBF-4F95-B5DB-7031B2514152}"
