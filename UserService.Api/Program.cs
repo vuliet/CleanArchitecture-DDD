@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using UserService.Api.Errors;
 using UserService.Application;
 using UserService.Infrastructure;
 
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
         .AddInfrastructure(builder.Configuration);
 
     builder.Services.AddControllers();
+
+    builder.Services.AddSingleton<ProblemDetailsFactory, UserServiceProblemDetailsFactory>();
 }
 
 var app = builder.Build();

@@ -1,12 +1,12 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Application.Services.Authentication;
 using UserService.Contracts.Authentication;
 
 namespace UserService.Api.Controllers;
 
-[ApiController]
 [Route("authentication")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : ApiController
 {
     private readonly IAuthenticationService _authenticationService;
     public AuthenticationController(
@@ -18,20 +18,25 @@ public class AuthenticationController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterRequest request)
     {
-        var result = _authenticationService.Register(
+        ErrorOr<AuthenticationResult> result = _authenticationService.Register(
             request.FirstName,
             request.LastName,
             request.Email,
             request.Password);
 
-        var response = new AuthenticationResponse(
+        return result.Match(
+            result => Ok(MapAuthenticationResult(result)),
+            errors => Problem(errors));
+    }
+
+    private static AuthenticationResponse MapAuthenticationResult(AuthenticationResult result)
+    {
+        return new AuthenticationResponse(
             result.User.Id,
             result.User.FirstName,
             result.User.LastName,
             result.User.Email,
             result.Token);
-
-        return Ok(response);
     }
 
     [HttpPost("login")]
@@ -41,13 +46,8 @@ public class AuthenticationController : ControllerBase
              request.Email,
              request.Password);
 
-        var response = new AuthenticationResponse(
-            result.User.Id,
-            result.User.FirstName,
-            result.User.LastName,
-            result.User.Email,
-            result.Token);
-
-        return Ok(response);
+        return result.Match(
+            result => Ok(MapAuthenticationResult(result)),
+            errors => Problem(errors));
     }
 }
