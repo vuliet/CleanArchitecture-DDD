@@ -1,6 +1,9 @@
 using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Application.Services.Authentication;
+using UserService.Application.Authentication.Commands;
+using UserService.Application.Authentication.Common;
+using UserService.Application.Authentication.Queries;
 using UserService.Contracts.Authentication;
 
 namespace UserService.Api.Controllers;
@@ -8,25 +11,26 @@ namespace UserService.Api.Controllers;
 [Route("authentication")]
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
-    public AuthenticationController(
-        IAuthenticationService authenticationService)
+    private readonly IMediator _mediator;
+
+    public AuthenticationController(IMediator mediator)
     {
-        _authenticationService = authenticationService;
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
-        ErrorOr<AuthenticationResult> result = _authenticationService.Register(
-            request.FirstName,
-            request.LastName,
-            request.Email,
-            request.Password);
+        ErrorOr<AuthenticationResult> result = await _mediator.Send(
+            new RegisterCommand(
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.Password));
 
         return result.Match(
             result => Ok(MapAuthenticationResult(result)),
-            errors => Problem(errors));
+            Problem);
     }
 
     private static AuthenticationResponse MapAuthenticationResult(AuthenticationResult result)
@@ -40,14 +44,15 @@ public class AuthenticationController : ApiController
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var result = _authenticationService.Login(
-             request.Email,
-             request.Password);
+        ErrorOr<AuthenticationResult> result = await _mediator.Send(
+            new LoginQuery(
+                request.Email,
+                request.Password));
 
         return result.Match(
             result => Ok(MapAuthenticationResult(result)),
-            errors => Problem(errors));
+            Problem);
     }
 }

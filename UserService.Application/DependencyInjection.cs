@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using UserService.Application.Services.Authentication;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace UserService.Application
 {
@@ -7,7 +7,7 @@ namespace UserService.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddMediatR(typeof(DependencyInjection).Assembly);
 
             return services;
         }
