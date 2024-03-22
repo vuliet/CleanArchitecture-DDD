@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
@@ -91,7 +92,12 @@ namespace UserService.Api.Errors
                 problemDetails.Extensions["traceId"] = traceId;
             }
 
-            problemDetails.Extensions.Add("customProperty", "customValue");
+            var errors = httpContext?.Items["errors"] as List<Error>;
+
+            if (errors is not null)
+            {
+                problemDetails.Extensions.Add("errorCodes", errors.Select(error => error.Code));
+            }
 
             _configure?.Invoke(new() { HttpContext = httpContext!, ProblemDetails = problemDetails });
         }
