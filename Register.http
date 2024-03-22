@@ -1,0 +1,11 @@
+﻿@host=https://localhost:5001
+
+POST {{host}}/authentication/register
+Content-Type application/json
+
+{
+   "firstName": "Thai",
+   "lastName": "Vu",
+   "email": "thai35.tv@gmail.com",
+   "password": "12345678"
+}
