@@ -1,5 +1,5 @@
 ﻿using Mapster;
-using UserService.Application.Authentication.Commands;
+using UserService.Application.Authentication.Commands.Register;
 using UserService.Application.Authentication.Common;
 using UserService.Application.Authentication.Queries;
 using UserService.Contracts.Authentication;

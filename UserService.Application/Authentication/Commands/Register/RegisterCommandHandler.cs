@@ -6,7 +6,7 @@ using UserService.Application.Common.Interfaces.Persistence;
 using UserService.Domain.Common.Errors;
 using UserService.Domain.Entities;
 
-namespace UserService.Application.Authentication.Commands
+namespace UserService.Application.Authentication.Commands.Register
 {
     public class RegisterCommandHandler :
         IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
