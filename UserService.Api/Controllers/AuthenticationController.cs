@@ -1,4 +1,5 @@
 using ErrorOr;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Application.Authentication.Commands;
@@ -11,48 +12,38 @@ namespace UserService.Api.Controllers;
 [Route("authentication")]
 public class AuthenticationController : ApiController
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _mediator;
+    private readonly IMapper _mapper;
 
-    public AuthenticationController(IMediator mediator)
+    public AuthenticationController(
+        IMediator mediator,
+        IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
-        ErrorOr<AuthenticationResult> result = await _mediator.Send(
-            new RegisterCommand(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                request.Password));
+        var command = _mapper.Map<RegisterCommand>(request);
+
+        ErrorOr<AuthenticationResult> result = await _mediator.Send(command);
 
         return result.Match(
-            result => Ok(MapAuthenticationResult(result)),
+            result => Ok(_mapper.Map<AuthenticationResponse>(result)),
             Problem);
-    }
-
-    private static AuthenticationResponse MapAuthenticationResult(AuthenticationResult result)
-    {
-        return new AuthenticationResponse(
-            result.User.Id,
-            result.User.FirstName,
-            result.User.LastName,
-            result.User.Email,
-            result.Token);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        ErrorOr<AuthenticationResult> result = await _mediator.Send(
-            new LoginQuery(
-                request.Email,
-                request.Password));
+        var query = _mapper.Map<LoginQuery>(request);
+
+        ErrorOr<AuthenticationResult> result = await _mediator.Send(query);
 
         return result.Match(
-            result => Ok(MapAuthenticationResult(result)),
+            result => Ok(_mapper.Map<AuthenticationResponse>(result)),
             Problem);
     }
 }
